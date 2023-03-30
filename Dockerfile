@@ -9,4 +9,4 @@ ENV PYTHONUNBUFFERED=1
 RUN pip install -r requirements/production.txt \
     && apt-get update \
     && apt-get -y install wkhtmltopdf \
-    && apt-get -y autoclean
+    && apt-get -y autoclean \
