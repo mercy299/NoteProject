@@ -30,4 +30,9 @@ RUN apt install python3-pip \
 RUN pip install psycopg2-binary \
     pip install psycopg2 \
 # Install django framwork
-RUN pipenv install django \
+RUN pipenv install django 
+
+EXPOSE 8000
+
+
+ENTRYPOINT [ "./entrypoint.sh" ]
