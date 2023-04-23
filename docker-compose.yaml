@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  # APP {DJANGO}
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: maiempire/noted-app
+    container_name: noted
+    env_file: .env
+    volumes:
+      - ./site:/noted
+      - ./static:/noted/frontend
+      - ./media:/noted/media
+    ports:
+      - "0.0.0.0:8000:8000"
+    networks:
+      - noted-network
+    labels:
+      kompose.service.type: LoadBalancer
+
+# DATABASE {POSTGRESQL}
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - 5432
+    networks:
+      - noted-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${DATABASE_NAME}", "-U", "${DATABASE_USER}" ]
+      retries: 3
+      timeout: 5s
+
+  # CACHING
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379
+    networks:
+      - noted-network
+    depends_on:
+      - postgres
+
+# NETWORK AND DRIVERS
+networks:
+  noted-network:
+    driver: bridge
+
+volumes:
+  db:
