@@ -13,7 +13,7 @@ ENV PYTHONUNBUFFERED=1
 #install requirements and dependencies
 RUN pip install --no-cache-dir -r requirements/production.txt \
     && apt update \
-    && apt install -y wkhtmltopdf \
+    && apt -y install wkhtmltopdf \
     && apt -y autoclean 
 
 EXPOSE 8000
