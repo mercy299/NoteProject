@@ -11,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1 
 
 #install requirements and dependencies
-RUN pip install -r requirements/production.txt \
+RUN pip install --no-cache-dir -r requirements/production.txt \
     && apt update \
     && apt install -y wkhtmltopdf \
     && apt -y autoclean 
